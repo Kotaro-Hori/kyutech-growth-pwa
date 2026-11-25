@@ -1,5 +1,5 @@
-/* KYUTECH GROWTH v1.1.1 — offline-first app shell. */
-const CACHE_NAME = 'kyutech-growth-appshell-v1.1.1';
+/* KYUTECH GROWTH v1.5 — offline-first app shell. */
+const CACHE_NAME = 'kyutech-growth-appshell-v1.5';
 const CACHE_PREFIXES = ['kyutech-growth-appshell-', 'kyutech-growth-v'];
 const BASE = new URL(self.registration.scope);
 const SHELL = ['index.html', 'app.js', 'styles.css', 'manifest.webmanifest',

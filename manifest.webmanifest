@@ -1,1 +1,23 @@
-{"id":"/kyutech-growth-v01","name":"KYUTECH GROWTH 指導者試作","short_name":"GROWTH 試作","description":"指導者向け成長管理アプリのオフライン試作版","start_url":"./index.html","scope":"./","display":"standalone","background_color":"#F5F6F8","theme_color":"#0F1B2E","icons":[{"src":"./icon-192.png","sizes":"192x192","type":"image/png"},{"src":"./icon-512.png","sizes":"512x512","type":"image/png"}]}
+{
+  "id": "/kyutech-growth-v01",
+  "name": "KYUTECH GROWTH（育成管理試作）",
+  "short_name": "GROWTH",
+  "description": "選手・保護者・スタッフ・監督の育成管理試作。将来の複数チーム対応に備えた内部データ識別付き。",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F5F6F8",
+  "theme_color": "#0F1B2E",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
