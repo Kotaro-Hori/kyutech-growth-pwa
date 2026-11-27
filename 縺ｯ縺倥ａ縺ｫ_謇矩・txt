@@ -1,0 +1,6 @@
+KYUTECH GROWTH Ver.1.9
+1. README_v1.9.md を確認
+2. Windowsで python -m http.server 8000
+3. http://localhost:8000/ を開く
+4. ログイン画面の「安全な運用に向けた確認事項を見る」を確認
+注意：実在選手の測定値、氏名、InBodyデータを入力しないでください。

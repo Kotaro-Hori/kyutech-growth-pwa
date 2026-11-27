@@ -1,9 +1,9 @@
-/* KYUTECH GROWTH v1.7 — offline-first app shell. */
-const CACHE_NAME = 'kyutech-growth-appshell-v1.7';
+/* KYUTECH GROWTH v1.9 — offline-first app shell. */
+const CACHE_NAME = 'kyutech-growth-appshell-v2.0';
 const CACHE_PREFIXES = ['kyutech-growth-appshell-', 'kyutech-growth-v'];
 const BASE = new URL(self.registration.scope);
-const SHELL = ['index.html', 'app.js', 'styles.css', 'manifest.webmanifest',
-               'apple-touch-icon.png', 'icon-192.png', 'icon-512.png'];
+const SHELL = ['index.html', 'app.js', 'local-db.js', 'styles.css', 'manifest.webmanifest',
+               'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'security-guide.html', 'cloud-test.html', 'cloud-test.js'];
 const canonical = name => new URL(name, BASE).href;
 
 self.addEventListener('install', event => {
@@ -17,7 +17,7 @@ self.addEventListener('install', event => {
         if (!response.ok || response.type === 'opaque') throw new Error(file + ': HTTP ' + response.status);
         await cache.put(canonical(file), response);
       } catch (err) {
-        if (['index.html', 'app.js', 'styles.css'].includes(file)) throw err;
+        if (['index.html', 'app.js', 'local-db.js', 'styles.css'].includes(file)) throw err;
         console.warn('Optional PWA asset could not be cached:', file, err);
       }
     }
@@ -43,6 +43,10 @@ self.addEventListener('fetch', event => {
   event.respondWith((async () => {
     const cache = await caches.open(CACHE_NAME);
     // iOS Home Screen navigation must work with no Wi-Fi; ignore cache-busting query strings.
+    if (req.mode === 'navigate' && url.pathname.endsWith('/cloud-test.html')) {
+      try { return await fetch(req); }
+      catch { return new Response('接続テストはオンラインで使用してください。', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}}); }
+    }
     if (req.mode === 'navigate') {
       const saved = await cache.match(canonical('index.html'));
       if (saved) return saved;
@@ -52,7 +56,7 @@ self.addEventListener('fetch', event => {
     }
     const rel = url.pathname.slice(BASE.pathname.length);
     const local = SHELL.includes(rel);
-    if (local) {
+    if (local && !['cloud-test.html','cloud-test.js'].includes(rel)) {
       const saved = await cache.match(canonical(rel));
       if (saved) return saved;
     }
