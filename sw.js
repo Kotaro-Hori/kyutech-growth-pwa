@@ -1,5 +1,5 @@
 /* v2.2 offline shell only. NEVER cache private API response or dynamically retrieved player data. */
-const CACHE_NAME='kyutech-growth-appshell-v2.2';
+const CACHE_NAME='kyutech-growth-appshell-v2.3';
 const BASE=new URL(self.registration.scope);
 const SHELL=['index.html','cloud-app.js','cloud-app.css','styles.css','manifest.webmanifest','apple-touch-icon.png','icon-192.png','icon-512.png','demo.html','app.js','local-db.js','security-guide.html','cloud-test.html','cloud-test.js'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{const c=await caches.open(CACHE_NAME);for(const file of SHELL){try{const r=await fetch(new URL(file,BASE),{cache:'reload'});if(r.ok)await c.put(new URL(file,BASE),r.clone());else if(['index.html','cloud-app.js','cloud-app.css','styles.css'].includes(file))throw Error(file)}catch(e){if(['index.html','cloud-app.js','cloud-app.css','styles.css'].includes(file))throw e}}await self.skipWaiting()})()));

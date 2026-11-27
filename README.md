@@ -1,5 +1,3 @@
-# KYUTECH GROWTH Ver.2.2
+# KYUTECH GROWTH v2.3
 
-**先に [README_v2.2.md](README_v2.2.md) をお読みください。**
-
-Supabase Auth・RLSを利用したクラウド入力の試験版です。架空データ専用です。
+最初に `README_v2.3.md` を読んでください。架空データ専用。
