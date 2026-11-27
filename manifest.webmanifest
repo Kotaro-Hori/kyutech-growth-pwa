@@ -1,6 +1,6 @@
 {
-  "id": "/kyutech-growth-v01",
-  "name": "KYUTECH GROWTH（育成管理試作）",
+  "id": "/kyutech-growth-v21",
+  "name": "KYUTECH GROWTH（クラウド閲覧テスト）",
   "short_name": "GROWTH",
   "description": "選手・保護者・スタッフ・監督の育成管理試作。将来の複数チーム対応に備えた内部データ識別付き。",
   "start_url": "./index.html",

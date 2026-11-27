@@ -1,3 +1,3 @@
-# KYUTECH GROWTH v1.9
+# KYUTECH GROWTH Ver.2.1
 
-最初に `README_v1.9.md` をお読みください。試作専用。実在選手のデータは入力しないでください。
+最初に `README_v2.1.md` をお読みください。架空データ専用です。

@@ -1,65 +1,12 @@
-/* KYUTECH GROWTH v1.9 — offline-first app shell. */
-const CACHE_NAME = 'kyutech-growth-appshell-v2.0';
-const CACHE_PREFIXES = ['kyutech-growth-appshell-', 'kyutech-growth-v'];
-const BASE = new URL(self.registration.scope);
-const SHELL = ['index.html', 'app.js', 'local-db.js', 'styles.css', 'manifest.webmanifest',
-               'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'security-guide.html', 'cloud-test.html', 'cloud-test.js'];
-const canonical = name => new URL(name, BASE).href;
-
-self.addEventListener('install', event => {
-  event.waitUntil((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    // The HTML, JS, and CSS must all be cached before an offline launch is possible.
-    // Add other files separately so a missing icon never breaks the entire install.
-    for (const file of SHELL) {
-      try {
-        const response = await fetch(new Request(canonical(file), {cache: 'reload'}));
-        if (!response.ok || response.type === 'opaque') throw new Error(file + ': HTTP ' + response.status);
-        await cache.put(canonical(file), response);
-      } catch (err) {
-        if (['index.html', 'app.js', 'local-db.js', 'styles.css'].includes(file)) throw err;
-        console.warn('Optional PWA asset could not be cached:', file, err);
-      }
-    }
-    await self.skipWaiting();
-  })());
-});
-
-self.addEventListener('activate', event => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.filter(k => k !== CACHE_NAME && CACHE_PREFIXES.some(p => k.startsWith(p)))
-      .map(k => caches.delete(k)));
-    await self.clients.claim();
-  })());
-});
-
-self.addEventListener('fetch', event => {
-  const req = event.request;
-  if (req.method !== 'GET') return;
-  const url = new URL(req.url);
-  if (url.origin !== self.location.origin || !url.pathname.startsWith(BASE.pathname)) return;
-
-  event.respondWith((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    // iOS Home Screen navigation must work with no Wi-Fi; ignore cache-busting query strings.
-    if (req.mode === 'navigate' && url.pathname.endsWith('/cloud-test.html')) {
-      try { return await fetch(req); }
-      catch { return new Response('接続テストはオンラインで使用してください。', {status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}}); }
-    }
-    if (req.mode === 'navigate') {
-      const saved = await cache.match(canonical('index.html'));
-      if (saved) return saved;
-      try { return await fetch(req); }
-      catch { return new Response('オフライン用の準備が完了していません。Wi-Fiに接続してアプリを一度開いてください。',
-        {status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}}); }
-    }
-    const rel = url.pathname.slice(BASE.pathname.length);
-    const local = SHELL.includes(rel);
-    if (local && !['cloud-test.html','cloud-test.js'].includes(rel)) {
-      const saved = await cache.match(canonical(rel));
-      if (saved) return saved;
-    }
-    return fetch(req);
-  })());
+/* v2.1 offline shell only. NEVER cache private API response or dynamically retrieved player data. */
+const CACHE_NAME='kyutech-growth-appshell-v2.1';
+const BASE=new URL(self.registration.scope);
+const SHELL=['index.html','cloud-app.js','cloud-app.css','styles.css','manifest.webmanifest','apple-touch-icon.png','icon-192.png','icon-512.png','demo.html','app.js','local-db.js','security-guide.html','cloud-test.html','cloud-test.js'];
+self.addEventListener('install',event=>event.waitUntil((async()=>{const c=await caches.open(CACHE_NAME);for(const file of SHELL){try{const r=await fetch(new URL(file,BASE),{cache:'reload'});if(r.ok)await c.put(new URL(file,BASE),r.clone());else if(['index.html','cloud-app.js','cloud-app.css','styles.css'].includes(file))throw Error(file)}catch(e){if(['index.html','cloud-app.js','cloud-app.css','styles.css'].includes(file))throw e}}await self.skipWaiting()})()));
+self.addEventListener('activate',event=>event.waitUntil((async()=>{const keys=await caches.keys();await Promise.all(keys.filter(k=>k!==CACHE_NAME&&(k.startsWith('kyutech-growth-appshell-')||k.startsWith('kyutech-growth-v'))).map(k=>caches.delete(k)));await self.clients.claim()})()));
+self.addEventListener('fetch',event=>{const req=event.request;if(req.method!=='GET')return;const url=new URL(req.url);if(url.origin!==self.location.origin||!url.pathname.startsWith(BASE.pathname))return;
+const rel=url.pathname.slice(BASE.pathname.length);
+if(req.mode==='navigate'&&rel==='cloud-test.html'){event.respondWith(fetch(req).catch(()=>new Response('接続テストはオンライン専用です。',{status:503})));return;}
+if(req.mode==='navigate'&&(!rel||rel==='index.html')){event.respondWith(fetch(req).catch(async()=>{const c=await caches.open(CACHE_NAME);return await c.match(new URL('index.html',BASE))||new Response('再読み込みしてください。',{status:503})}));return;}
+if(SHELL.includes(rel)){event.respondWith(fetch(req).catch(async()=>{const c=await caches.open(CACHE_NAME);return await c.match(new URL(rel,BASE))||new Response('オフラインキャッシュはありません。',{status:503})}));}
 });
