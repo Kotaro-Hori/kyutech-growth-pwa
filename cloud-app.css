@@ -10,3 +10,8 @@
 #cloud-content[data-page="goals"] .cloud-training-input{display:none}
 #cloud-content[data-page="practice"] .cloud-goal-input{display:none}
 @media(max-width:600px){.cloud-batch-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* v2.4 goal linkage and advice */
+#cloud-content:not([data-page="practice"]) .cloud-advice-input{display:none}
+#cloud-content[data-page="practice"] .cloud-measure-input{display:none}
+.cloud-advice-input textarea{min-height:110px}

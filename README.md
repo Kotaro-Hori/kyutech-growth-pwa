@@ -1,3 +1,3 @@
-# KYUTECH GROWTH v2.3
+# KYUTECH GROWTH Ver.2.4
 
-最初に `README_v2.3.md` を読んでください。架空データ専用。
+まず `README_v2.4.md` を確認してください。架空データのみ。
